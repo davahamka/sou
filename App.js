@@ -9,7 +9,7 @@ import AccountScreen from './src/screens/AccountScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
 import PulsaScreen from './src/screens/PulsaScreen';
 import { Image, StatusBar, View, Text } from "react-native";
-import {tailwind} from './lib/tailwind';
+import { tailwind } from './lib/tailwind';
 
 
 function LogoTitle() {
@@ -99,8 +99,8 @@ const PaymenStackScreen = () => {
         headerTintColor: '#fff',
         headerTitleStyle: {
           fontWeight: '500',
-          color:'#000',
-          textAlign:'center'
+          color: '#000',
+          textAlign: 'center'
         },
         cardStyle: {
           backgroundColor: "#fff"
@@ -157,12 +157,20 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{
           headerTitle: "",
-          headerStyle:{
-            height:0
+          headerStyle: {
+            height: 0
           }
         }}>
           <Stack.Screen name="Awal" component={Awal} />
-          <Stack.Screen name="Pulsa" component={PulsaScreen} />
+          <Stack.Screen name="Pulsa" component={PulsaScreen} options={{
+            headerStyle: {
+              height: 60,
+              elevation:0
+            },
+            cardStyle:{
+              backgroundColor:'#fff '
+            }
+          }} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

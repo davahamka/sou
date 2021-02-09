@@ -2,7 +2,7 @@ import React from "react";
 import { SafeAreaView, ScrollView, View, Text, Button } from "react-native";
 import { Grid, Row, Col } from "react-native-easy-grid"
 import Swiper from "react-native-swiper";
-import {tailwind} from "../../lib/tailwind";
+import { tailwind } from "../../lib/tailwind";
 
 export default function HomeScreen({ navigation }) {
   return (
@@ -70,7 +70,7 @@ export default function HomeScreen({ navigation }) {
 
         <View style={tailwind("px-4 pt-10")}>
           <Text style={tailwind("text-xl text-gray-800 font-semibold")}>Info dan Promosi</Text>
-          <Swiper>
+          <Swiper contentOffset>
             <View>
               <Text>Hello Swiper</Text>
             </View>
