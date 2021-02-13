@@ -5,16 +5,17 @@ import {Dimensions} from 'react-native';
 
 var width = Dimensions.get('window').width; //full width
 
-export default ({data}) => {
+export default ({data, onPress}) => {
   return (
     <TouchableOpacity
       style={{
         width: width,
-      }}>
+      }}
+      onPress={onPress}>
       <View
         style={{
           borderRadius: 8,
-          marginVertical: 14,
+          marginVertical: 12,
           alignSelf: 'stretch',
           backgroundColor: '#ffffff',
           marginHorizontal: 12,
@@ -28,14 +29,13 @@ export default ({data}) => {
           shadowRadius: 1.0,
           elevation: 1,
         }}>
-        <Text style={tailwind('text-gray-900 text-lg font-bold')}>
-          Yellow 1GB / 3Hari
+        <Text style={tailwind('text-gray-900 font-bold')}>
+          {data.short_dsc}
         </Text>
-        <Text style={tailwind('text-gray-400 text-sm ')}>
-          Kuota Utama 1GB, masa aktif 3 Hari. Internetan aman dengan Pulsa Safe,
-          Pembelian paket akan menggantia
+        <Text style={tailwind('text-gray-400 text-sm mt-1')}>{data.dsc}</Text>
+        <Text style={tailwind('mt-3 text-gray-900 font-bold')}>
+          Rp{data.price}
         </Text>
-        <Text style={tailwind('mt-3 text-gray-900 font-bold')}>Rp.5000</Text>
       </View>
     </TouchableOpacity>
   );

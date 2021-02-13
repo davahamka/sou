@@ -6,9 +6,11 @@ import {
   TextInput,
   StyleSheet,
   Dimensions,
+  Image,
 } from 'react-native';
+import {useQueries} from 'react-query';
 import {tailwind, getColor} from '../../../lib/tailwind';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {TabView, TabBar} from 'react-native-tab-view';
 import PulsaCard from '../../components/PulsaCard';
 import PaketDataCard from '../../components/PaketDataCard';
 import {checkOperator, formatRupiah} from '../../utils/helpers';
@@ -16,54 +18,90 @@ import {AppContext} from '../../context/state';
 import {Modalize} from 'react-native-modalize';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Col, Grid} from 'react-native-easy-grid';
-import {dataPulsa} from '../../utils/dummy';
+import axios from 'axios';
+import {LOOKUP_PRODUCT_LIST, PASLANG_KEY} from '../../utils/api';
+import Spinner from 'react-native-spinkit';
 
-const FirstRoute = ({onOpen, data, setPilihan}) => {
+async function getProductListPulsa(category, kode_provider) {
+  const response = await axios.post(PASLANG_KEY + LOOKUP_PRODUCT_LIST, {
+    category,
+    kode_provider,
+    is_faktur: '',
+  });
+  return response.data;
+}
+
+const FirstRoute = ({
+  onOpen,
+  data,
+  setPilihan,
+  isLoading,
+  noTujuan,
+  isError,
+}) => {
   return (
     <ScrollView style={[styles.scene, {backgroundColor: getColor('gray-100')}]}>
       <View
         style={tailwind(
           'flex flex-row flex-wrap items-center w-full px-2 mt-2 mb-6',
         )}>
-        {data.map((item) => (
-          <PulsaCard
-            key={item.kode_produk}
-            data={item}
-            onPress={() => {
-              onOpen();
-              setPilihan(item);
-            }}
-          />
-        ))}
+        {noTujuan.length < 4 ? (
+          <Text></Text>
+        ) : isLoading ? (
+          <Spinner type="CircleFlip" />
+        ) : isError ? (
+          <Text>Error</Text>
+        ) : (
+          data.map((item) => (
+            <PulsaCard
+              key={item.kode_produk}
+              data={item}
+              onPress={() => {
+                onOpen();
+                setPilihan(item);
+              }}
+            />
+          ))
+        )}
       </View>
     </ScrollView>
   );
 };
 
-const SecondRoute = () => {
+const SecondRoute = ({
+  onOpen,
+  data,
+  setPilihan,
+  isLoading,
+  noTujuan,
+  isError,
+}) => {
   return (
     <ScrollView style={[styles.scene, {backgroundColor: getColor('gray-100')}]}>
       <View style={tailwind('flex flex-row flex-wrap w-full mt-2 mb-6')}>
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
-        <PaketDataCard data={{kode_produk: 4000}} />
+        <View
+          style={tailwind(
+            'flex flex-row flex-wrap justify-center items-center w-full px-2 mt-2 mb-6',
+          )}>
+          {noTujuan.length < 4 ? (
+            <Text></Text>
+          ) : isLoading ? (
+            <Text>Loading...</Text>
+          ) : isError ? (
+            <View></View>
+          ) : (
+            data.map((item) => (
+              <PaketDataCard
+                key={item.kode_produk}
+                data={item}
+                onPress={() => {
+                  onOpen();
+                  setPilihan(item);
+                }}
+              />
+            ))
+          )}
+        </View>
       </View>
     </ScrollView>
   );
@@ -108,6 +146,18 @@ export default function PulsaScreen() {
     {key: 'first', title: 'Pulsa'},
     {key: 'second', title: 'Paket Data'},
   ]);
+  const result = useQueries([
+    {
+      queryKey: ['PULSA', operator],
+      queryFn: () => getProductListPulsa('#PULSA', operator),
+      initialData: [],
+    },
+    {
+      queryKey: ['PAKETDATA', operator],
+      queryFn: () => getProductListPulsa('#PAKETDATA', operator),
+      initialData: [],
+    },
+  ]);
   const modalizeRef = useRef(null);
 
   const onOpen = () => {
@@ -124,12 +174,23 @@ export default function PulsaScreen() {
         return (
           <FirstRoute
             onOpen={onOpen}
-            data={dataPulsa}
+            data={result[0]?.data?.data || []}
             setPilihan={setPilihan}
+            isLoading={result[0].isLoading}
+            isError={result[0].isError}
+            noTujuan={noTujuan}
           />
         );
       case 'second':
-        return <SecondRoute />;
+        return (
+          <SecondRoute
+            onOpen={onOpen}
+            data={result[1]?.data?.data || []}
+            setPilihan={setPilihan}
+            isLoading={result[1].isLoading}
+            noTujuan={noTujuan}
+          />
+        );
       default:
         return null;
     }
@@ -138,7 +199,15 @@ export default function PulsaScreen() {
   return (
     <>
       <View style={tailwind('px-4 pt-4 bg-white flex flex-row items-center')}>
-        <Text>Logo</Text>
+        <Image
+          style={{
+            width: 40,
+            height: 40,
+          }}
+          source={{
+            uri: `http://dev.pasukanlangit.id/_next/image?url=http%3A%2F%2Fciptasolusiaplikasi.com%2Ficon%2FIcon_${operator}.png&w=64&q=75`,
+          }}
+        />
         <Text style={tailwind('ml-3 text-lg font-bold')}>{operator}</Text>
       </View>
 
@@ -147,9 +216,11 @@ export default function PulsaScreen() {
         <TextInput
           keyboardType="numeric"
           value={noTujuan}
-          onChangeText={(text) => {
+          onChangeText={async (text) => {
             setNoTujuan(text);
             setOperator(checkOperator(text));
+            if (operator && operator !== 'Operator' && noTujuan.length === 4) {
+            }
           }}
           onSubmitEditing={() => console.log(noTujuan)}
           selectionColor={getColor('blue-500')}
@@ -167,7 +238,7 @@ export default function PulsaScreen() {
 
       <Modalize
         ref={modalizeRef}
-        snapPoint={360}
+        snapPoint={380}
         scrollViewProps={{
           showsHorizontalScrollIndicator: false,
           showsVerticalScrollIndicator: false,
@@ -199,12 +270,26 @@ export default function PulsaScreen() {
               {operator + ' ' + pilihan.kode_produk}
             </Text>
             <Text style={tailwind('text-gray-500')}>
-              {pilihan.price && formatRupiah(pilihan.price, 'Rp.')}
+              {pilihan.short_dsc && formatRupiah(pilihan.short_dsc, 'Rp.')}
             </Text>
           </View>
           <View style={tailwind('pt-2 flex flex-row justify-between')}>
             <Text style={tailwind('text-gray-500')}>Biaya Transaksi</Text>
-            <Text style={tailwind('text-gray-500')}>Rp.0</Text>
+            <Text style={tailwind('text-gray-500')}>
+              {pilihan.short_dsc &&
+                pilihan.price &&
+                formatRupiah(
+                  String(+pilihan.price - +pilihan.short_dsc.replace('.', '')),
+                  'Rp.',
+                )}
+            </Text>
+          </View>
+
+          <View style={tailwind('pt-2 flex flex-row justify-between')}>
+            <Text style={tailwind('text-gray-500')}>Total Pembayaran</Text>
+            <Text style={tailwind('text-gray-500')}>
+              {pilihan.price && formatRupiah(pilihan.price, 'Rp.')}
+            </Text>
           </View>
         </View>
 

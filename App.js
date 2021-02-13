@@ -5,9 +5,10 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
+import {QueryClient, QueryClientProvider} from 'react-query';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {AppProvider} from './src/context/state';
-import {Image, StatusBar, View, Text} from 'react-native';
+import {Image, StatusBar, View, Text, LogBox} from 'react-native';
 import {tailwind} from './lib/tailwind';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -26,6 +27,9 @@ import GameScreen from './src/screens/home/GameScreen';
 import EWalletScreen from './src/screens/home/EWalletScreen';
 import EWalletDetailed from './src/screens/home/EWalletDetailed';
 import GameDetailedScreen from './src/screens/home/GameDetailedScreen';
+import BPJSScreen from './src/screens/home/BPJSScreen';
+
+LogBox.ignoreLogs(['Setting a timer']);
 
 function LogoTitle() {
   return (
@@ -197,145 +201,163 @@ const Awal = () => {
   );
 };
 
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
     <>
       <StatusBar backgroundColor="#0A57FF" />
-      <AppProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerTitle: '',
-              headerStyle: {
-                height: 0,
-              },
-              cardStyle: {
-                backgroundColor: '#fff',
-              },
-              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-            }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen
-              name="Register"
-              component={RegisterScreen}
-              options={{headerShown: false, headerLeft: () => null}}
-            />
-            <Stack.Screen
-              name="Awal"
-              component={Awal}
-              options={{headerShown: false, headerLeft: () => null}}
-            />
-            <Stack.Screen
-              name="Pulsa"
-              component={PulsaScreen}
-              options={{
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                headerTitle: '',
                 headerStyle: {
-                  height: 60,
-                  elevation: 0,
+                  height: 0,
                 },
-                headerTitle: 'Pulsa dan Paket Data',
                 cardStyle: {
-                  backgroundColor: '#f1f1f1',
+                  backgroundColor: '#fff',
                 },
-              }}
-            />
-            <Stack.Screen
-              name="PLN"
-              component={PLNScreen}
-              options={{
-                headerStyle: {
-                  height: 60,
-                  elevation: 0,
-                },
-                headerTitle: 'PLN',
-                cardStyle: {
-                  backgroundColor: '#f1f1f1',
-                },
-              }}
-            />
-            <Stack.Screen
-              name="PLNToken"
-              component={PLNTokenScreen}
-              options={{
-                headerStyle: {
-                  height: 60,
-                  elevation: 0,
-                },
-                headerTitle: 'PLN',
-                cardStyle: {
-                  backgroundColor: '#f1f1f1',
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Game"
-              component={GameScreen}
-              options={{
-                headerStyle: {
-                  height: 60,
-                  elevation: 0,
-                },
-                headerTitle: 'Game',
-                cardStyle: {
-                  backgroundColor: '#f1f1f1',
-                },
-              }}
-            />
-            <Stack.Screen
-              name="GameDetailed"
-              component={GameDetailedScreen}
-              options={{
-                headerStyle: {
-                  height: 60,
-                  elevation: 0,
-                },
-                headerTitle: 'Game',
-                cardStyle: {
-                  backgroundColor: '#f1f1f1',
-                },
-              }}
-            />
-            <Stack.Screen
-              name="EWallet"
-              component={EWalletScreen}
-              options={{
-                headerStyle: {
-                  height: 60,
-                  elevation: 0,
-                },
-                headerTitle: 'E-Wallet',
-                cardStyle: {
-                  backgroundColor: '#f1f1f1',
-                },
-              }}
-            />
-            <Stack.Screen
-              name="EWalletDetailed"
-              component={EWalletDetailed}
-              options={{
-                headerStyle: {
-                  height: 60,
-                  elevation: 0,
-                },
-                headerTitle: 'E-Wallet',
-                cardStyle: {
-                  backgroundColor: '#f1f1f1',
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Edit Profile"
-              component={EditProfileScreen}
-              options={{
-                headerStyle: {
-                  height: 60,
-                  elevation: 0,
-                },
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </AppProvider>
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+              }}>
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen
+                name="Register"
+                component={RegisterScreen}
+                options={{headerShown: false, headerLeft: () => null}}
+              />
+              <Stack.Screen
+                name="Awal"
+                component={Awal}
+                options={{headerShown: false, headerLeft: () => null}}
+              />
+              <Stack.Screen
+                name="Pulsa"
+                component={PulsaScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'Pulsa dan Paket Data',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="PLN"
+                component={PLNScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'PLN',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="PLNToken"
+                component={PLNTokenScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'PLN',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="Game"
+                component={GameScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'Game',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="GameDetailed"
+                component={GameDetailedScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'Game',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="EWallet"
+                component={EWalletScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'E-Wallet',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="EWalletDetailed"
+                component={EWalletDetailed}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'E-Wallet',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="BPJS"
+                component={BPJSScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                  headerTitle: 'E-Wallet',
+                  cardStyle: {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="Edit Profile"
+                component={EditProfileScreen}
+                options={{
+                  headerStyle: {
+                    height: 60,
+                    elevation: 0,
+                  },
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AppProvider>
+      </QueryClientProvider>
     </>
   );
 };

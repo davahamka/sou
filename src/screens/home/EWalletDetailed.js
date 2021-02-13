@@ -1,12 +1,17 @@
 import React from 'react';
 import {View, Text, ScrollView, TextInput, StyleSheet} from 'react-native';
+import {useQuery} from 'react-query';
 import {tailwind, getColor} from '../../../lib/tailwind';
 import PulsaCard from '../../components/PulsaCard';
+import {getProductList} from '../../utils/api';
 
 export default ({route}) => {
   const {type} = route.params;
   const [noTujuan, setNoTujuan] = React.useState('');
-
+  const {data} = useQuery(type, () =>
+    getProductList('#EMONEY', type === 'GOPAY' ? 'GOJEK' : type),
+  );
+  console.log(data);
   return (
     <>
       <View style={tailwind('px-4 pt-4 bg-white flex flex-row')}>
@@ -34,16 +39,9 @@ export default ({route}) => {
           style={tailwind(
             'flex flex-row flex-wrap items-center w-full px-2 mt-2 mb-6',
           )}>
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
-          <PulsaCard data={{kode_produk: 4000}} />
+          {data?.data.map((item) => (
+            <PulsaCard data={item} key={item.kode_produk} />
+          ))}
         </View>
       </ScrollView>
     </>
