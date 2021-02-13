@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { tailwind } from "../../lib/tailwind";
 import { Grid, Col, Row } from "react-native-easy-grid";
 
@@ -74,9 +74,9 @@ export default function ActivityScreen() {
               </View>
             </View>
             <View style={{ borderTopWidth: 1, borderTopColor: "rgba(229, 231, 235, 0.5)" }}>
-              <View style={{ flex: 1, flexDirection: 'row', borderBottomLeftRadius: 6, borderBottomRightRadius: 6, justifyContent: 'center', backgroundColor: '#fff', padding: 16, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.18, shadowRadius: 1, elevation: 1 }}>
+              <TouchableOpacity style={{ flex: 1, flexDirection: 'row', borderBottomLeftRadius: 6, borderBottomRightRadius: 6, justifyContent: 'center', backgroundColor: '#fff', padding: 16, shadowColor: "#000", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.18, shadowRadius: 1, elevation: 1 }}>
                 <Text>SEE MORE</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
