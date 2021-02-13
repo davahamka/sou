@@ -11,7 +11,7 @@ import {tailwind, getColor} from '../../../lib/tailwind';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import PulsaCard from '../../components/PulsaCard';
 import PaketDataCard from '../../components/PaketDataCard';
-import {checkOperator} from '../../utils/helpers';
+import {checkOperator, formatRupiah} from '../../utils/helpers';
 import {AppContext} from '../../context/state';
 import {Modalize} from 'react-native-modalize';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -192,13 +192,15 @@ export default function PulsaScreen() {
 
         <View style={tailwind('px-4 py-6')}>
           <Text style={tailwind('text-lg font-bold text-gray-800')}>
-            Detail Pembyaran
+            Detail Pembayaran
           </Text>
           <View style={tailwind('pt-6 flex flex-row justify-between')}>
             <Text style={tailwind('text-gray-500')}>
               {operator + ' ' + pilihan.kode_produk}
             </Text>
-            <Text style={tailwind('text-gray-500')}>Rp.{pilihan.price}</Text>
+            <Text style={tailwind('text-gray-500')}>
+              {pilihan.price && formatRupiah(pilihan.price, 'Rp.')}
+            </Text>
           </View>
           <View style={tailwind('pt-2 flex flex-row justify-between')}>
             <Text style={tailwind('text-gray-500')}>Biaya Transaksi</Text>
