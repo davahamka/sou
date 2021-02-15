@@ -94,13 +94,15 @@ export default function HomeScreen({navigation}) {
               </Row>
               <Row style={tailwind('mt-6')}>
                 <Col>
-                  <Icon
-                    name="rocket"
-                    size={30}
-                    color="#900"
-                    style={tailwind('text-center')}
-                  />
-                  <Text style={tailwind('text-center mt-2')}>BPJS</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('BPJS')}>
+                    <Icon
+                      name="rocket"
+                      size={30}
+                      color="#900"
+                      style={tailwind('text-center')}
+                    />
+                    <Text style={tailwind('text-center mt-2')}>BPJS</Text>
+                  </TouchableOpacity>
                 </Col>
                 <Col>
                   <TouchableOpacity onPress={() => navigation.navigate('Game')}>
@@ -120,7 +122,7 @@ export default function HomeScreen({navigation}) {
                     color="#900"
                     style={tailwind('text-center')}
                   />
-                  <Text style={tailwind('text-center mt-2')}>Voucher</Text>
+                  <Text style={tailwind('text-center mt-2')}>PDAM</Text>
                 </Col>
                 <Col>
                   <TouchableOpacity

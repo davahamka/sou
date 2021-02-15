@@ -338,7 +338,7 @@ const App = () => {
                     height: 60,
                     elevation: 0,
                   },
-                  headerTitle: 'E-Wallet',
+                  headerTitle: 'BPJS',
                   cardStyle: {
                     backgroundColor: '#f1f1f1',
                   },
